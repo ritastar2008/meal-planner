@@ -1,3 +1,4 @@
+import AiImportModal from "./components/AiImportModal";
 import React, { useState, useEffect, useMemo } from 'react';
 import { db } from './firebase';
 import { collection, onSnapshot, addDoc, doc, updateDoc } from 'firebase/firestore';
@@ -151,6 +152,7 @@ export default function App() {
   const [savedRecipes, setSavedRecipes] = useState([]);
   const [expandedRecipeId, setExpandedRecipeId] = useState(null);
   const [showAddRecipeModal, setShowAddRecipeModal] = useState(false);
+  const [showAiImportModal, setShowAiImportModal] = useState(false);
   const [newRecipe, setNewRecipe] = useState({
     name: '', role: 'one_pot', primaryVeg: '洋蔥', cookware: 'cooker', ingredients: '', steps: '', note: '', url: ''
   });
@@ -786,13 +788,23 @@ export default function App() {
                 <h2 className="font-bold text-base text-slate-800">私房菜色與靈感庫</h2>
                 <p className="text-[11px] text-slate-500">已連線雲端資料庫，新增即時同步</p>
               </div>
-              <button 
-                onClick={() => setShowAddRecipeModal(true)}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center space-x-1 shadow-sm transition"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>新增菜色</span>
-              </button>
+             <div className="flex space-x-1.5">
+  <button 
+    onClick={() => setShowAiImportModal(true)}
+    className="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-semibold px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shadow-sm transition"
+  >
+    <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+    <span>AI 匯入</span>
+  </button>
+
+  <button 
+    onClick={() => setShowAddRecipeModal(true)}
+    className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg flex items-center space-x-1 shadow-sm transition"
+  >
+    <Plus className="w-3.5 h-3.5" />
+    <span>手動</span>
+  </button>
+</div>
             </div>
 
             <div className="space-y-2.5">
@@ -1064,6 +1076,12 @@ export default function App() {
           </div>
         </div>
       )}
+
+{/* ================= AI 匯入彈窗 Modal ================= */}
+<AiImportModal 
+  isOpen={showAiImportModal} 
+  onClose={() => setShowAiImportModal(false)} 
+/>
 
       {/* ================= 挑選訣竅彈窗 ================= */}
       {activeTipItem && (
